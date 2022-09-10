@@ -39,7 +39,7 @@ def cli():
 def ls(config):
     "list secrets in AWS Secrets Manager"
     if config:
-        config = ConfigHandler(project_name)
+        # config = ConfigHandler(project_name)
         config_handler.list_config_dirs()
     else:
         resp = aws.get_secrets_list()

@@ -62,6 +62,10 @@ class ConfigHandler:
             self.config.read(self.config_file_path)
             print("-- config file exists --")
             print(self.print_configs())
+            return False
+        else:
+            print("-- new project --")
+            return True
 
     def list_config_dirs(self):
         # list directories

@@ -20,6 +20,12 @@ def echo_dict(input_dict: dict):
     for key, val in input_dict.items():
         click.echo(f"{key[:18]+'..' if len(key)>17 else key}{(20-int(len(key)))*'.'}{val}")
 
+def create_config_locally(project_name:str, secret_dict:dict):
+    resp = config_handler.put_project(project_name)
+    if resp:
+        config_handler.create_file_and_dir()
+        config_handler.write_config_file_from_dict(config_dict=secret_dict)
+        return config_handler.print_configs()
 
 @click.group()
 @click.version_option()
@@ -33,6 +39,7 @@ def cli():
 def ls(config):
     "list secrets in AWS Secrets Manager"
     if config:
+        config = ConfigHandler(project_name)
         config_handler.list_config_dirs()
     else:
         resp = aws.get_secrets_list()
@@ -45,10 +52,10 @@ def ls(config):
 @click.option("--config", is_flag=True)
 @click.option("-s", "--secret-string", "secret_string", help="serialized json", required=True)
 @click.option("-n", "--secret-name", "secret_name", required=True)
-def create(secret_string, secret_name):
-    "create new secret"
+def create(secret_string, secret_name, config):
+    "create new secret locally (--config) or in aws secrets"
     if config:
-        config_handler.write_config_file_from_dict(config_dict=json.loads(secret_string))
+        create_config_locally(project_name=secret_name, secret_dict=json.loads(secret_string))
     else:
         aws.create(name=secret_name, secret_value=secret_string)
 
@@ -93,17 +100,16 @@ def search(key_word):
 
 
 @cli.command()
-@click.option("-n", "--secret-name", "secret_name", required=False, default=None)
+@click.option("-n", "--secret-path", "secret_path", required=False, default=None)
 @click.option("-p", "--project-name", "project_name", required=True)
-def transfer(secret_name, project_name):
-    config = ConfigHandler(project_name)
+def transfer(secret_path: str, project_name: str):
+    "transfer aws secret to local config file"
     if secret_name is None:
         secrets_prefix = "projects/dev"
         secret_name = os.path.join(secrets_prefix, project_name)
-    secret = aws.get_secret(secret_name=secret_name)
-    config.write_config_file_from_dict(config_dict=secret)
-    return config.print_configs()
-
+    secret_dict = aws.get_secret(secret_name=secret_name)
+    create_config_locally(project_name, secret_dict)
+    return config_handler.print_configs()
 
 cli.add_command(ls)
 cli.add_command(create)

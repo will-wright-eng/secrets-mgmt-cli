@@ -42,11 +42,15 @@ def ls(config):
 
 
 @cli.command()
+@click.option("--config", is_flag=True)
 @click.option("-s", "--secret-string", "secret_string", help="serialized json", required=True)
 @click.option("-n", "--secret-name", "secret_name", required=True)
 def create(secret_string, secret_name):
     "create new secret"
-    aws.create(name=secret_name, secret_value=secret_string)
+    if config:
+        config_handler.write_config_file_from_dict(config_dict=json.loads(secret_string))
+    else:
+        aws.create(name=secret_name, secret_value=secret_string)
 
 
 @cli.command()

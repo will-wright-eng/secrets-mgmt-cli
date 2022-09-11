@@ -50,10 +50,16 @@ def ls(config):
 
 @cli.command()
 @click.option("--config", is_flag=True)
-@click.option("-s", "--secret-string", "secret_string", help="serialized json", required=True)
+@click.option("-s", "--secret-string", "secret_string", help="serialized json", required=False, default=None)
 @click.option("-n", "--secret-name", "secret_name", required=True)
 def create(secret_string, secret_name, config):
     "create new secret locally (--config) or in aws secrets"
+    if secret_string is None:
+        secret_string = {}
+        click.echo("no secret string provided, please enter json contents")
+        entry = ManualEntry(secret_string)
+        secret_string = json.dumps(entry.manual_gen_json())
+
     if config:
         create_config_locally(project_name=secret_name, secret_dict=json.loads(secret_string))
     else:

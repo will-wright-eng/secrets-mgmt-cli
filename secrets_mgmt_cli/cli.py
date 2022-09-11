@@ -6,48 +6,8 @@ import click
 
 from .aws import aws
 from .config import ConfigHandler, config_handler
+from .utils import DateTimeEncoder, ManualEntry, echo_dict
 
-
-class DateTimeEncoder(json.JSONEncoder):
-    def default(self, z):
-        if isinstance(z, datetime.datetime):
-            return str(z)
-        else:
-            return super().default(z)
-
-
-class ManualEntry:
-    def __init__(self, secret_string):
-        self.secret_string = secret_string
-
-    def manual_gen_json(self):
-        field_key = input("field key:")
-        field_val = input(f"{field_key} value:")
-        self.secret_string[field_key] = field_val
-        self.add_fields()
-        return self.secret_string
-
-    def add_fields(self):
-        resp = input("add field [Y/n]?")
-        if resp == "Y":
-            return self.manual_gen_json()
-        elif resp == "n":
-            pass
-        else:
-            print("invalid response")
-            self.add_fields()
-
-
-def echo_dict(input_dict: dict):
-    for key, val in input_dict.items():
-        click.echo(f"{key[:18]+'..' if len(key)>17 else key}{(20-int(len(key)))*'.'}{val}")
-
-def create_config_locally(project_name:str, secret_dict:dict):
-    resp = config_handler.put_project(project_name)
-    if resp:
-        config_handler.create_file_and_dir()
-        config_handler.write_config_file_from_dict(config_dict=secret_dict)
-        return config_handler.print_configs()
 
 @click.group()
 @click.version_option()
@@ -84,7 +44,8 @@ def create(secret_string, secret_name, config):
         secret_string = json.dumps(entry.manual_gen_json())
 
     if config:
-        create_config_locally(project_name=secret_name, secret_dict=json.loads(secret_string))
+        config_handler = ConfigHandler(project_name=secret_name)
+        config_handler.create_config_locally(secret_dict=json.loads(secret_string))
     else:
         aws.create(name=secret_name, secret_value=secret_string)
 
@@ -130,21 +91,16 @@ def search(key_word):
 
 
 @cli.command()
-@click.option("-n", "--secret-path", "secret_path", required=False, default=None)
+@click.option("-n", "--secret-name", "secret_name", required=False, default=None)
 @click.option("-p", "--project-name", "project_name", required=True)
-<<<<<<< HEAD
-def transfer(secret_path: str, project_name: str):
-    "transfer aws secret to local config file"
-=======
-def transfer(secret_name, project_name):
+def transfer(secret_name: str, project_name: str):
     "get secret from projects/dev/ and recreate in ~/.config/project_name/config file"
-    config = ConfigHandler(project_name)
->>>>>>> main
+    config_handler = ConfigHandler(project_name)
     if secret_name is None:
         secrets_prefix = "projects/dev"
         secret_name = os.path.join(secrets_prefix, project_name)
     secret_dict = aws.get_secret(secret_name=secret_name)
-    create_config_locally(project_name, secret_dict)
+    config_handler.create_config_locally(secret_dict)
     return config_handler.print_configs()
 
 cli.add_command(ls)

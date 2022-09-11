@@ -2,8 +2,8 @@ import os
 import json
 import time
 import base64
-import pathlib
 import logging
+import pathlib
 import configparser
 
 import boto3
@@ -52,6 +52,8 @@ class AwsSecretMgmt:
                 kwargs["SecretString"] = secret_value
             elif isinstance(secret_value, bytes):
                 kwargs["SecretBinary"] = secret_value
+            else:
+                raise ValueError("secret_value needs to be of dtype str or bytes")
             response = self.client.create_secret(**kwargs)
             self.name = name
             logger.info("Created secret %s.", name)

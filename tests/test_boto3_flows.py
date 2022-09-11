@@ -7,15 +7,13 @@ TODO
 import json
 import datetime
 from pathlib import Path
-from dateutil.tz import tzlocal
 
 import botocore.session
+from dateutil.tz import tzlocal
 from botocore.stub import Stubber
 from click.testing import CliRunner
-
-from secrets_mgmt_cli.cli import cli
 from secrets_mgmt_cli.aws import aws
-
+from secrets_mgmt_cli.cli import cli
 
 smgmt_ls_resp = {
     "SecretList": [

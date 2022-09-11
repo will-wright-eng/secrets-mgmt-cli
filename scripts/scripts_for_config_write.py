@@ -17,7 +17,6 @@ https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/s3.ht
 from .aws import AwsSecretMgmt
 from .config import ConfigHandler
 
-
 aws = AwsSecretMgmt()
 
 

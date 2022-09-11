@@ -50,7 +50,6 @@ def create(secret_string, secret_name, config):
         aws.create(name=secret_name, secret_value=secret_string)
 
 
-
 @cli.command()
 @click.option("-n", "--secret-name", "secret_name", required=True)
 def read(secret_name):
@@ -102,6 +101,7 @@ def transfer(secret_name: str, project_name: str):
     secret_dict = aws.get_secret(secret_name=secret_name)
     config_handler.create_config_locally(secret_dict)
     return config_handler.print_configs()
+
 
 cli.add_command(ls)
 cli.add_command(create)

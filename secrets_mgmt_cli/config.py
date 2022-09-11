@@ -4,7 +4,7 @@ import configparser
 
 
 class ConfigHandler:
-    def __init__(self, project_name: str ="tmp"):
+    def __init__(self, project_name: str = "tmp"):
         p = pathlib.Path.home()
         self.home_path = p
         self.config_path = p / ".config" / project_name
@@ -40,7 +40,7 @@ class ConfigHandler:
         self.config_path.mkdir(parents=True, exist_ok=True)
         self.config_file_path.touch()
 
-    def create_config_locally(self, secret_dict:dict):
+    def create_config_locally(self, secret_dict: dict):
         self.create_file_and_dir()
         self.write_config_file_from_dict(config_dict=secret_dict)
         return self.print_configs()

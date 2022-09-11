@@ -13,7 +13,6 @@ pyparsing==3.0.9
 pytest==7.1.2
 python-dateutil==2.8.2
 s3transfer==0.6.0
--e git+ssh://git@github.com/william-cass-wright/secrets-mgmt-cli.git@658cf5c202425217f689edf143694efcd2120290#egg=secrets_mgmt_cli
 six==1.16.0
 tomli==2.0.1
 urllib3==1.26.9

@@ -48,3 +48,7 @@ To run the tests:
 ```bash
 pytest
 ```
+
+## new release
+- change version in `setup.py`
+- use `lint` and `test` labels in PR to pre-run components of publish workflow

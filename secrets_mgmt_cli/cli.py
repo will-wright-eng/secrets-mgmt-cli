@@ -94,7 +94,7 @@ def search(key_word):
 @click.option("-p", "--project-name", "project_name", required=True)
 def transfer(secret_name: str, project_name: str):
     "get secret from projects/dev/ and recreate in ~/.config/project_name/config file"
-    config_handler = ConfigHandler(project_name)
+    config_handler = ConfigHandler(project_name=project_name)
     if secret_name is None:
         secrets_prefix = "projects/dev"
         secret_name = os.path.join(secrets_prefix, project_name)

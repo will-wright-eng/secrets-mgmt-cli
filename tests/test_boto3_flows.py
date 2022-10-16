@@ -4,14 +4,15 @@ TODO
 - https://botocore.amazonaws.com/v1/documentation/api/latest/reference/stubber.html
 """
 
-import json
 import datetime
+import json
 from pathlib import Path
 
 import botocore.session
-from dateutil.tz import tzlocal
 from botocore.stub import Stubber
 from click.testing import CliRunner
+from dateutil.tz import tzlocal
+
 from secrets_mgmt_cli.aws import aws
 from secrets_mgmt_cli.cli import cli
 
@@ -21,11 +22,17 @@ smgmt_ls_resp = {
             "ARN": "arn:aws:secretsmanager:us-west-1:582406646515:secret:test/test_secret-q6V0kt",
             "Name": "test/test_secret",
             "Description": "test secret",
-            "LastChangedDate": datetime.datetime(2022, 6, 13, 23, 4, 0, 566000, tzinfo=tzlocal()),
+            "LastChangedDate": datetime.datetime(
+                2022, 6, 13, 23, 4, 0, 566000, tzinfo=tzlocal()
+            ),
             "LastAccessedDate": datetime.datetime(2022, 6, 13, 17, 0, tzinfo=tzlocal()),
             "Tags": [{"Key": "test", "Value": "test"}],
-            "SecretVersionsToStages": {"31dcba26-fd45-4791-8062-d04ef4aa7c93": ["AWSCURRENT"]},
-            "CreatedDate": datetime.datetime(2022, 6, 13, 23, 4, 0, 413000, tzinfo=tzlocal()),
+            "SecretVersionsToStages": {
+                "31dcba26-fd45-4791-8062-d04ef4aa7c93": ["AWSCURRENT"]
+            },
+            "CreatedDate": datetime.datetime(
+                2022, 6, 13, 23, 4, 0, 413000, tzinfo=tzlocal()
+            ),
         }
     ],
     "ResponseMetadata": {

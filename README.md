@@ -9,46 +9,59 @@
 
 - A simple CLI for managing secrets in AWS Secrets Manager
 - [PyPI project][2]
-- Based on the following projects: 
-	- cookiecutter template [simonw/click-app][3]
-	- AWS code sample [secretsmanager_basics.py][1]
+- Based on the following projects:
+  - cookiecutter template [simonw/click-app][3]
+  - AWS code sample [secretsmanager_basics.py][1]
 
 [1]: https://docs.aws.amazon.com/code-samples/latest/catalog/python-secretsmanager-secretsmanager_basics.py.html
 [2]: https://pypi.org/project/secrets-mgmt-cli/
 [3]: https://github.com/simonw/click-app
 
 ## Installation
+
 Install this tool using `pip`:
+
 ```bash
 pip install secrets-mgmt-cli
 ```
 
 ## Usage
+
 For help, run:
+
 ```bash
 secrets-mgmt-cli --help
 ```
+
 You can also use:
+
 ```bash
 python -m secrets_mgmt_cli --help
 ```
 
 ## Development
+
 To contribute to this tool, first checkout the code. Then create a new virtual environment:
+
 ```bash
 cd secrets-mgmt-cli
 python -m venv venv
 source venv/bin/activate
 ```
+
 Now install the dependencies and test dependencies:
+
 ```bash
 pip install -e '.[test]'
 ```
+
 To run the tests:
+
 ```bash
 pytest
 ```
 
 ## new release
+
 - change version in `setup.py`
 - use `lint` and `test` labels in PR to pre-run components of publish workflow

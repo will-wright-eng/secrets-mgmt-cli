@@ -1,10 +1,10 @@
-import os
-import json
-import time
 import base64
-import logging
-import pathlib
 import configparser
+import json
+import logging
+import os
+import pathlib
+import time
 
 import boto3
 from botocore.exceptions import ClientError
@@ -31,7 +31,9 @@ class AwsSecretMgmt:
         :param client: A Boto3 Secrets Manager client.
         """
         session = boto3.session.Session()
-        self.client = session.client(service_name="secretsmanager", region_name=get_default_region())
+        self.client = session.client(
+            service_name="secretsmanager", region_name=get_default_region()
+        )
         self.name = None
 
     def _clear(self):
@@ -173,11 +175,16 @@ class AwsSecretMgmt:
 
         try:
             response = self.client.update_secret_version_stage(
-                SecretId=self.name, VersionStage=stage, RemoveFromVersionId=remove_from, MoveToVersionId=move_to
+                SecretId=self.name,
+                VersionStage=stage,
+                RemoveFromVersionId=remove_from,
+                MoveToVersionId=move_to,
             )
             logger.info("Updated version stage %s for secret %s.", stage, self.name)
         except ClientError:
-            logger.exception("Couldn't update version stage %s for secret %s.", stage, self.name)
+            logger.exception(
+                "Couldn't update version stage %s for secret %s.", stage, self.name
+            )
             raise
         else:
             return response
@@ -199,7 +206,9 @@ class AwsSecretMgmt:
             raise ValueError
 
         try:
-            self.client.delete_secret(SecretId=self.name, ForceDeleteWithoutRecovery=without_recovery)
+            self.client.delete_secret(
+                SecretId=self.name, ForceDeleteWithoutRecovery=without_recovery
+            )
             logger.info("Deleted secret %s.", self.name)
             self._clear()
         except ClientError:
@@ -228,7 +237,9 @@ class AwsSecretMgmt:
     def get_secret(self, secret_name):
         # See https://docs.aws.amazon.com/secretsmanager/latest/apireference/API_GetSecretValue.html
         try:
-            get_secret_value_response = self.client.get_secret_value(SecretId=secret_name)
+            get_secret_value_response = self.client.get_secret_value(
+                SecretId=secret_name
+            )
         except ClientError as e:
             if e.response["Error"]["Code"] == "DecryptionFailureException":
                 # Secrets Manager can't decrypt the protected secret text using the provided KMS key.
@@ -257,7 +268,9 @@ class AwsSecretMgmt:
                 secret = get_secret_value_response["SecretString"]
                 return json.loads(secret)
             else:
-                decoded_binary_secret = base64.b64decode(get_secret_value_response["SecretBinary"])
+                decoded_binary_secret = base64.b64decode(
+                    get_secret_value_response["SecretBinary"]
+                )
 
 
 aws = AwsSecretMgmt()

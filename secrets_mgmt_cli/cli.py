@@ -1,6 +1,6 @@
-import os
-import json
 import datetime
+import json
+import os
 
 import click
 
@@ -35,7 +35,14 @@ def ls(config):
 
 @cli.command()
 @option_config
-@click.option("-s", "--secret-string", "secret_string", help="serialized json", required=False, default=None)
+@click.option(
+    "-s",
+    "--secret-string",
+    "secret_string",
+    help="serialized json",
+    required=False,
+    default=None,
+)
 @option_secret_name
 def create(secret_string, secret_name, config):
     "[--config compatible] create new secret locally or in aws secrets"
@@ -68,7 +75,9 @@ def read(secret_name, config):
 
 @cli.command(help=aws.put_value.__doc__)
 @option_config  # TODO: needd to implement local update method along with manual entry class (as seen in create())
-@click.option("-s", "--secret-string", "secret_string", help="serialized json", required=True)
+@click.option(
+    "-s", "--secret-string", "secret_string", help="serialized json", required=True
+)
 @option_secret_name
 def update(secret_string, secret_name, config):
     resp = aws.put_value(secret_value=secret_string, name=secret_name)

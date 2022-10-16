@@ -1,6 +1,6 @@
-import os
-import json
 import datetime as dt
+import json
+import os
 
 from click import echo
 

@@ -1,6 +1,6 @@
-import os
-import json
 import datetime
+import json
+import os
 
 import click
 
@@ -33,7 +33,14 @@ def ls(config):
 
 @cli.command()
 @click.option("--config", is_flag=True)
-@click.option("-s", "--secret-string", "secret_string", help="serialized json", required=False, default=None)
+@click.option(
+    "-s",
+    "--secret-string",
+    "secret_string",
+    help="serialized json",
+    required=False,
+    default=None,
+)
 @click.option("-n", "--secret-name", "secret_name", required=True)
 def create(secret_string, secret_name, config):
     "create new secret locally (--config) or in aws secrets"
@@ -62,7 +69,9 @@ def read(secret_name):
 
 
 @cli.command()
-@click.option("-s", "--secret-string", "secret_string", help="serialized json", required=True)
+@click.option(
+    "-s", "--secret-string", "secret_string", help="serialized json", required=True
+)
 @click.option("-n", "--secret-name", "secret_name", required=True)
 def update(secret_string, secret_name):  # , description):
     "change or add the contents of an existing secert"

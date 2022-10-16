@@ -1,4 +1,5 @@
 from click.testing import CliRunner
+
 from secrets_mgmt_cli.cli import cli
 
 

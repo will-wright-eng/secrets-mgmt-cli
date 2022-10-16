@@ -72,7 +72,14 @@ class ConfigHandler:
             print("-- new project --")
             return True
 
-    def list_config_dirs(self):
+    def display_config_contents(self, file_path):
+        print("\n-- ", file_path, " --")
+        tmp = configparser.ConfigParser()
+        tmp.read(file_path)
+        for key, val in tmp.defaults().items():
+            self.formatted_print(key, val)
+
+    def list_config_dirs(self, secret_name: str = "all"):
         # list directories
         p = self.home_path / ".config"
         active = []
@@ -86,14 +93,22 @@ class ConfigHandler:
                 else:
                     other.append(x.resolve())
                     resp = "no config file"
-                self.formatted_print(x, resp, n=45)
+                if secret_name == "all":
+                    self.formatted_print(x, resp, n=45)
+        if secret_name == "all":
+            for file_path in active:
 
-        for file_path in active:
-            print("\n-- ", file_path, " --")
-            tmp = configparser.ConfigParser()
-            tmp.read(file_path)
-            for key, val in tmp.defaults().items():
-                self.formatted_print(key, val)
+                self.display_config_contents(file_path)
+                # tmp = configparser.ConfigParser()
+                # tmp.read(file_path)
+                # for key, val in tmp.defaults().items():
+                #     self.formatted_print(key, val)
+        else:
+            secret_path = [path for path in active if secret_name in str(path)]
+            if len(secret_path) > 1:
+                print("multiple matches")
+            else:
+                self.display_config_contents(secret_path[0])
 
     def formatted_print(self, key, val, n=20):
         key = str(key)

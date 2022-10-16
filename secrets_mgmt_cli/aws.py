@@ -39,7 +39,7 @@ class AwsSecretMgmt:
 
     def create(self, name, secret_value):
         """
-        Creates a new secret. The secret value can be a string or bytes.
+        [aws] Creates a new secret. The secret value can be a string or bytes.
 
         :param name: The name of the secret to create.
         :param secret_value: The value of the secret.
@@ -65,7 +65,7 @@ class AwsSecretMgmt:
 
     def describe(self, name=None):
         """
-        Gets metadata about a secret.
+        [aws] Gets metadata about a secret.
 
         :param name: The name of the secret to load. If `name` is None, metadata about
                      the current secret is retrieved.
@@ -88,7 +88,7 @@ class AwsSecretMgmt:
 
     def get_value(self, stage=None):
         """
-        Gets the value of a secret.
+        [aws] Gets the value of a secret.
 
         :param stage: The stage of the secret to retrieve. If this is None, the
                       current stage is retrieved.
@@ -113,7 +113,7 @@ class AwsSecretMgmt:
 
     def get_random_password(self, pw_length):
         """
-        Gets a randomly generated password.
+        [aws] Gets a randomly generated password.
 
         :param pw_length: The length of the password.
         :return: The generated password.
@@ -130,7 +130,7 @@ class AwsSecretMgmt:
 
     def put_value(self, secret_value, name=None, stages=None):
         """
-        Puts a value into an existing secret. When no stages are specified, the
+        [aws] Puts a value into an existing secret. When no stages are specified, the
         value is set as the current ('AWSCURRENT') stage and the previous value is
         moved to the 'AWSPREVIOUS' stage. When a stage is specified that already
         exists, the stage is associated with the new value and removed from the old
@@ -161,7 +161,7 @@ class AwsSecretMgmt:
 
     def update_version_stage(self, stage, remove_from, move_to):
         """
-        Updates the stage associated with a version of the secret.
+        [aws] Updates the stage associated with a version of the secret.
 
         :param stage: The stage to update.
         :param remove_from: The ID of the version to remove the stage from.
@@ -188,7 +188,7 @@ class AwsSecretMgmt:
         name=None,
     ):
         """
-        Deletes the secret.
+        [aws] Deletes the secret.
 
         :param without_recovery: Permanently deletes the secret immediately when True;
                                  otherwise, the deleted secret can be restored within
@@ -208,7 +208,7 @@ class AwsSecretMgmt:
 
     def list(self, max_results):
         """
-        Lists secrets for the current account.
+        [aws] Lists secrets for the current account.
 
         :param max_results: The maximum number of results to return.
         :return: Yields secrets one at a time.

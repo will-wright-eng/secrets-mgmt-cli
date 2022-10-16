@@ -1,7 +1,7 @@
 import os
 import json
 import datetime as dt
-
+from typing import List
 from click import echo
 
 
@@ -14,15 +14,22 @@ class DateTimeEncoder(json.JSONEncoder):
 
 
 class ManualEntry:
-    def __init__(self, secret_string):
-        self.secret_string = secret_string
+    def __init__(self):
+        self.secret_string = {}
 
-    def manual_gen_json(self):
-        field_key = input("field key:")
-        field_val = input(f"{field_key} value:")
-        self.secret_string[field_key] = field_val
-        self.add_fields()
-        return self.secret_string
+    def manual_gen_json(self, fields: List[str] = None):
+        if fields is None:
+            field_key = input("field key:")
+            field_val = input(f"{field_key} value:")
+            self.secret_string[field_key] = field_val
+            self.add_fields()
+            return self.secret_string
+        else:
+            for field in fields:
+                field_val = input(f"{field} value:")
+                self.secret_string[field_key] = field_val
+            self.add_fields()
+            return self.secret_string
 
     def add_fields(self):
         resp = input("add field [Y/n]?")
@@ -31,7 +38,7 @@ class ManualEntry:
         elif resp == "n":
             pass
         else:
-            print("invalid response")
+            echo("invalid response")
             self.add_fields()
 
 

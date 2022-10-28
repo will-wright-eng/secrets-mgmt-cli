@@ -95,14 +95,10 @@ class ConfigHandler:
                     resp = "no config file"
                 if secret_name == "all":
                     self.formatted_print(x, resp, n=45)
+
         if secret_name == "all":
             for file_path in active:
-
                 self.display_config_contents(file_path)
-                # tmp = configparser.ConfigParser()
-                # tmp.read(file_path)
-                # for key, val in tmp.defaults().items():
-                #     self.formatted_print(key, val)
         else:
             secret_path = [path for path in active if secret_name in str(path)]
             if len(secret_path) > 1:
